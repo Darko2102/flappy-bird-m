@@ -4,10 +4,10 @@ import { Text, View } from 'react-native';
 const Bird = ({birdBottom, birdLeft}) => {
     const birdHeight = 50;
     const birdWidth= 50;
+    const birdColor = {color};
     return(
     <View style={{
         position:'absolute',
-        backgroundColor: 'blue',
         width: birdWidth,
         height: birdHeight,
         left: birdLeft - birdWidth / 2,

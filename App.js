@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 export default function App() {
   const screenWidth = Dimensions.get("screen").width;
   const screenHeight = Dimensions.get("screen").height;
-
+  const color = "#c00f0fff"
   const birdLeft = screenWidth / 2;
   const [birdBottom, setBirdBottom] = useState(screenHeight / 2);
   const gravity = 3;
