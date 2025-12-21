@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import Bird from "./src/Bird";
 import { useEffect, useState } from "react";
-import Obstacles from "./components/Obstacle";
+import Obstacle from "./components/Obstacle";
 
 export default function App() {
   const screenWidth = Dimensions.get("screen").width;
@@ -12,8 +12,8 @@ export default function App() {
   const [obstaclesLeftTwo, setObstaclesLeftTwo] = useState(
     screenWidth + screenWidth / 2 + 30
   );
-  const [obstacleNegHeight, setObstacleNegHeight] = useState(0);
-  const [obstacleNegHeightTwo, setObstacleNegHeightTwo] = useState(0);
+  const [obstaclesNegHeight, setObstacleNegHeight] = useState(0);
+  const [obstaclesNegHeightTwo, setObstacleNegHeightTwo] = useState(0);
   let obstacleWidth = 60;
   let obstacleHeight = 300;
   let gap = 200;
@@ -21,10 +21,15 @@ export default function App() {
   const birdLeft = screenWidth / 2;
   const [birdBottom, setBirdBottom] = useState(screenHeight / 2);
   const gravity = 3;
+  const[isGameOver, setIsGameOver] = useState(false)
+  const[score, setScore]= useState(0)
 
   let gameTimerId;
   let obstaclesTimerId;
   let obstaclesTimerIdTwo;
+
+
+
 
   useEffect(() => {
     if (obstaclesLeft > -60) {
@@ -66,29 +71,66 @@ export default function App() {
     };
   }, [birdBottom]);
 
+
+  useEffect(() => {
+    if(
+      ((birdBottom < (obstaclesNegHeight + obstacleHeight + 30) ||
+      birdBottom > (obstaclesNegHeight + obstacleHeight + gap -30)) &&
+      (obstaclesLeft > screenWidth/2 -30 && obstaclesLeft , screenWidth/2 + 30)
+    )
+    ||
+    ((birdBottom < (obstaclesNegHeightTwo + obstacleHeight + 30) ||
+    birdBottom > (obstaclesNegHeightTwo + obstacleHeight + gap -30)) &&
+    (obstaclesLeftTwo > screenWidth/2 -30 && obstaclesLeftTwo < screenWidth/2 + 30)
+  )
+    )
+    {
+      console.log("Game Over")
+      gameOver()
+    }
+  })
+
+  const jump = () => {
+    if(!isGameOver && (birdBottom < screenHeight)) {
+      setBirdBottom(birdBottom => birdBottom + 50)
+      console.log('jumped')
+    }
+  }
+
+  const gameOver = () => {
+    clearInterval(gameTimerId)
+    clearInterval(obstaclesTimerId)
+    clearInterval(obstaclesTimerIdTwo)
+  }
+
   return (
-    <View style={styles.container}>
-      <Bird birdBottom={birdBottom} birdLeft={birdLeft} />
-
-      <Obstacles
-        color={"green"}
-        obstacleWidth={obstacleWidth}
-        obstacleHeight={obstacleHeight}
-        randomBottom={obstacleNegHeight}
-        gap={gap}
-        obstaclesLeft={obstaclesLeft}
-      />
-
-      <Obstacles
-        color={"yellow"}
-        obstacleWidth={obstacleWidth}
-        obstacleHeight={obstacleHeight}
-        randomBottom={obstacleNegHeightTwo}
-        gap={gap}
-        obstaclesLeft={obstaclesLeftTwo}
-      />
-    </View>
-  );
+    <TouchableWithoutFeedback onPress={jump}>
+      <View style={styles.container}>
+        <Image source={require('./assets/background.png')} style={styles.backgroundImage} />
+        <Text style={styles.score}>Score: {score}</Text>
+        <Bird 
+          birdBottom = {birdBottom} 
+          birdLeft = {birdLeft}
+        />
+        <Obstacle 
+          color={'green'}
+          obstacleWidth = {obstacleWidth}
+          obstacleHeight = {obstacleHeight}
+          randomBottom = {obstaclesNegHeight}
+          gap = {gap}
+          obstaclesLeft = {obstaclesLeft}
+        />
+        <Obstacle 
+          color={'yellow'}
+          obstacleWidth = {obstacleWidth}
+          obstacleHeight = {obstacleHeight}
+          randomBottom = {obstaclesNegHeightTwo}
+          gap = {gap}
+          obstaclesLeft = {obstaclesLeftTwo}
+        />
+      </View>
+    </TouchableWithoutFeedback>
+  ); 
 }
 
 const styles = StyleSheet.create({
@@ -98,4 +140,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  score: {
+    fontSize: 32,
+    top: 50,
+    position: 'absolute',
+    zIndex: 1,
+    color: 'white'
+  },
+  backgroundImage: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  } 
 });
