@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Image } from "react-native";
 
 const Obstacles = ({
   color,
@@ -10,7 +10,7 @@ const Obstacles = ({
   obstaclesLeft,
 }) => (
   <>
-    <View
+    <Image
       style={{
         position: "absolute",
         backgroundColor: color,
@@ -19,8 +19,10 @@ const Obstacles = ({
         left: obstaclesLeft,
         bottom: randomBottom + obstacleHeight + gap,
       }}
-    ></View>
-    <View
+      source={require("./assets/pipe.png")}
+      resizeMode="cover"
+    ></Image>
+    <Image
       style={{
         position: "absolute",
         backgroundColor: color,
@@ -29,7 +31,9 @@ const Obstacles = ({
         left: obstaclesLeft,
         bottom: randomBottom,
       }}
-    ></View>
+      source={require("../assets/pipe.png")}
+      resizeMode="cover"
+    ></Image>
   </>
 );
 
